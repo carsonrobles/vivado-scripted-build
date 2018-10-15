@@ -6,9 +6,9 @@ HDR       = $(wildcard $(PROJ_PATH)/src/*.svh)
 SRC       = $(wildcard $(PROJ_PATH)/src/*.sv)
 
 TOP       = top
-SYNTH_DCP = $(PROJ_PATH)/fab/$(TOP)-synth.dcp
-PLACE_DCP = $(PROJ_PATH)/fab/$(TOP)-place.dcp
-ROUTE_DCP = $(PROJ_PATH)/fab/$(TOP)-route.dcp
+SYNTH_DCP = $(PROJ_PATH)/fab/$(TOP)_synth.dcp
+PLACE_DCP = $(PROJ_PATH)/fab/$(TOP)_place.dcp
+ROUTE_DCP = $(PROJ_PATH)/fab/$(TOP)_route.dcp
 BIT       = $(PROJ_PATH)/fab/$(TOP).bit
 
 .PHONY: compile
@@ -34,7 +34,7 @@ $(SYNTH_DCP): $(PROJ_PATH)/scripts/synth.tcl Makefile $(CONSTR) $(HDR) $(SRC)
 	#   3: sources
 	#   4: output dcp file name
 	vivado -nojournal -log $(PROJ_PATH)/fab/synth.log -mode batch \
-		-source $< -tclargs $(PART) $(TOP) $(CONSTR) $(SRC) $@
+		-source $< -tclargs $(PART) $(TOP) $(CONSTR) "$(SRC)" $@
 
 # place
 $(PLACE_DCP): $(PROJ_PATH)/scripts/place.tcl Makefile $(SYNTH_DCP)
