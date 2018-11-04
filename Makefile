@@ -4,6 +4,7 @@ PART      = xc7a100tcsg324-1
 CONSTR    = $(PROJ_PATH)/fab/constr.xdc
 HDR       = $(wildcard $(PROJ_PATH)/src/*.svh)
 SRC       = $(wildcard $(PROJ_PATH)/src/*.sv)
+TB        = $(PROJ_PATH)/sim/top_tb.sv
 
 TOP       = top
 SYNTH_DCP = $(PROJ_PATH)/fab/$(TOP)_synth.dcp
@@ -17,6 +18,13 @@ BIT       = $(PROJ_PATH)/fab/$(TOP).bit
 .PHONY: route
 .PHONY: bit
 .PHONY: clean
+
+# TODO: this is the flow, but polish it
+.PHONY:sim
+sim:
+	xvlog --sv $(TB) $(SRC)
+	xelab --debug wave top_tb
+	xsim --gui top_tb
 
 compile: $(BIT)
 
@@ -66,6 +74,7 @@ clean:
 	# remove misc Xilinx files
 	rm -rf .Xil usage_statistics_webtalk.*
 	rm -rf $(PROJ_PATH)/fab/vivado* $(PROJ_PATH)/fab/*.log
+	rm -rf vivado* webtalk* xsim* *.log *.pb
 
 	# remove generated checkpoint files and bit file
 	rm -rf $(SYNTH_DCP) $(PLACE_DCP) $(ROUTE_DCP) $(BIT)
